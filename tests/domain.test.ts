@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { analyzeLayout, findBoundsIssues, findNarrowChannels, findOverlaps } from '../src/domain';
+import { analyzeLayout, applyMoveDraft, findBoundsIssues, findNarrowChannels, findOverlaps } from '../src/domain';
 import type { ExpoElement } from '../src/types';
 
 const item = (id: string, x: number, y: number, width = 4, height = 3): ExpoElement => ({ id, kind: 'booth', name: id, x, y, width, height, rotation: 0 });
@@ -22,5 +22,13 @@ describe('layout domain rules', () => {
     const analysis = analyzeLayout({ version: 1, title: 'x', field: { width: 20, height: 12 }, elements: [{ ...item('entry', 1, 5, 2, 1), kind: 'entrance' }, { ...item('stage', 10, 2, 5, 3), kind: 'stage' }] });
     expect(analysis.path?.points).toHaveLength(3);
     expect(analysis.path?.distance).toBeGreaterThan(0);
+  });
+
+  it('applies a move draft without mutating the working document', () => {
+    const document = { version: 1 as const, title: 'x', field: { width: 20, height: 12 }, elements: [item('a', 1, 1), item('b', 12, 1)] };
+    const preview = applyMoveDraft(document, { elementId: 'a', x: 5, y: 4 });
+    expect(preview.elements.find((element) => element.id === 'a')).toMatchObject({ x: 5, y: 4 });
+    expect(preview.elements.find((element) => element.id === 'b')).toMatchObject({ x: 12, y: 1 });
+    expect(document.elements.find((element) => element.id === 'a')).toMatchObject({ x: 1, y: 1 });
   });
 });

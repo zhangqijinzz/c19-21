@@ -58,6 +58,12 @@ export interface ChannelIssue {
   gap: number;
 }
 
+export interface MoveDraft {
+  elementId: string;
+  x: number;
+  y: number;
+}
+
 export interface PathPreview {
   points: Array<{ x: number; y: number }>;
   distance: number;

@@ -7,6 +7,7 @@ import type {
   ExpoElement,
   FieldSize,
   LayoutDocument,
+  MoveDraft,
   PathPreview,
   OverlapIssue,
 } from './types';
@@ -122,5 +123,10 @@ export const analyzeLayout = (document: LayoutDocument): Analysis => ({
 });
 
 export const findElement = (document: LayoutDocument, id: string | null) => document.elements.find((element) => element.id === id) ?? null;
+
+export const applyMoveDraft = (document: LayoutDocument, draft: MoveDraft): LayoutDocument => ({
+  ...document,
+  elements: document.elements.map((element) => (element.id === draft.elementId ? { ...element, x: draft.x, y: draft.y } : element)),
+});
 
 export const formatArea = (field: FieldSize) => `${field.width} × ${field.height} m`;
