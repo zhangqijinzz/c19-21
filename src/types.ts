@@ -58,6 +58,19 @@ export interface ChannelIssue {
   gap: number;
 }
 
+export interface MoveTrial {
+  elementId: string;
+  x: number;
+  y: number;
+}
+
+export interface TrialOrigin {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 export interface PathPreview {
   points: Array<{ x: number; y: number }>;
   distance: number;
